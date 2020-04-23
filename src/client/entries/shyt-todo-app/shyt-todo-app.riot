@@ -1,0 +1,52 @@
+<shyt-todo-app>
+
+  <h1>{ state.pageTitle }</h1>
+
+  <ul>
+    <li each="{ todo in todos }">
+      { todos.title }
+    </li>
+  </ul>
+
+  <script type="ts">
+    import {RiotComponentExport} from 'riot';
+    import {ShytTodoModel} from "../../../server/models/shyt-todo-model";
+    import {getShytTodos} from "./api";
+
+    interface State {
+      pageTitle: string;
+      todos: ShytTodoModel[];
+    }
+
+    interface ShytTodoApp extends RiotComponentExport<never, State> {
+      state: State;
+    }
+
+    function build(): ShytTodoApp {
+      return {
+        state: {
+          pageTitle: 'Shyt I gotz Todo, TODAY!',
+          todos: []
+        }
+      };
+
+      onBeforeMount(): void{
+        getShytTodos()
+          .then((stds) => {
+            this.update({
+              todos: stds
+            })
+          })
+
+      }
+    }
+
+    export default build;
+  </script>
+
+  <style type="scss">
+    :host {
+      display: block;
+    }
+  </style>
+</shyt-todo-app>

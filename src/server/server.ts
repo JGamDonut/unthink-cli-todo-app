@@ -8,7 +8,7 @@ import {defaultContainer} from './config/di-container';
 import { registerResource } from 'express-register-resource';
 import { ResourceType, registerDefaultRenderer } from 'resource-decorator';
 import { VersionResource } from './resources/version-resource';
-import { HelloWorldResource } from './resources/hello-world-resource';
+import { ShytTodoResource } from './resources/shyt-todo-resource';
 import { NunjucksResourceRenderer } from 'nunjucks-resource-renderer';
 
 const app: express.Application = express();
@@ -30,7 +30,7 @@ registerDefaultRenderer(ResourceType.TEMPLATE, nunjucksResourceRenderer);
 
 // Register resources here
 registerResource(app, VersionResource, defaultContainer);
-registerResource(app, HelloWorldResource, defaultContainer);
+registerResource(app, ShytTodoResource, defaultContainer);
 
 // For local development, the webpack dev server is used to serve up bundles
 if (!config.isProduction) {
