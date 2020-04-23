@@ -1,33 +1,33 @@
 import { ResourceBase } from './resource-base';
 import { resource, get, template, TemplateResponse, RedirectResponse, ApiResponse, CookieResponse } from 'resource-decorator';
-import {ShytTodoModel} from '../models/shyt-todo-model';
+import {TodoModel} from '../models/todo-model';
 
-const _shytTodos: ShytTodoModel[] = [
-  new ShytTodoModel({
+const _todos: TodoModel[] = [
+  new TodoModel({
     id: 0,
     title: 'morning beverage'
   }),
-  new ShytTodoModel({
+  new TodoModel({
     id: 1,
     title: 'morning meditation'
   }),
-  new ShytTodoModel({
+  new TodoModel({
     id: 2,
     title: 'morning quik workout'
   }),
-  new ShytTodoModel({
+  new TodoModel({
     id: 3,
     title: 'morning reads'
   }),
-  new ShytTodoModel({
+  new TodoModel({
     id: 4,
     title: 'morning snack'
   }),
-  new ShytTodoModel({
+  new TodoModel({
     id: 5,
     title: 'draw/sketch'
   }),
-  new ShytTodoModel({
+  new TodoModel({
     id: 6,
     title: 'work on website ui design'
   }),
@@ -37,16 +37,16 @@ const _shytTodos: ShytTodoModel[] = [
 @resource({
   basePath: '',
 })
-export class ShytTodoResource extends ResourceBase {
+export class TodoResource extends ResourceBase {
   @template()
-  async shytTodoPage(): Promise<TemplateResponse | RedirectResponse> {
-    return new TemplateResponse('shyttodo.html');
+  async todoPage(): Promise<TemplateResponse | RedirectResponse> {
+    return new TemplateResponse('todo.html');
   }
 
   @get({
-    path: '/api/shyttodo'
+    path: '/api/todo'
   })
   async getMessage(): Promise<ApiResponse | CookieResponse | void> {
-    return new ApiResponse(_shytTodos);
+    return new ApiResponse(_todos);
   }
 }
