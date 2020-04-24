@@ -1,0 +1,100 @@
+// FORMS
+
+
+
+
+
+
+
+
+
+// form parent
+.form {
+  font-size: calcRem(20px);
+  color: rgb(165, 112, 15);
+
+  @include tablet-landscape-down {
+    padding: calcRem(44px);
+    margin-right: calc(-4% - 1em);
+    margin-left: calc(-4% - 1em);
+  }
+
+  &.submitted {
+
+    .form-wrap {
+      max-height: 0;
+    }
+
+    .thanks {
+      display: block;
+    }
+  }
+}
+
+
+.form__fieldset {
+  padding: 0;
+  margin: 0;
+  border: 0;
+
+  &+.form__fieldset {
+    margin-top: calcRem(40px);
+  }
+
+  &+& {
+    margin-top: 5rem;
+  }
+}
+
+.form__label {
+  transition:
+    font-size ease-in 150ms,
+    color ease-in 150ms,
+    top ease-in 150ms,
+    transform ease-in 150ms;
+}
+
+.form__field.active label {
+  top: 22%;
+  transform: translateY(0);
+  color: rgb(95, 23, 23);
+  font-size: calcRem(12px);
+  transition:
+    font-size ease-out 250ms,
+    color ease-out 250ms,
+    top ease-out 250ms,
+    transform ease-out 250ms;
+}
+
+
+
+
+
+// grouping of label and input, radio, etc
+.form__field {
+  display: block;
+  position: relative;
+  margin: 0;
+  border: 0;
+  color: rgb(134, 124, 124);
+  font-size: calcRem(14px);
+
+  &+& {
+    margin-top: calcRem(20px);
+  }
+}
+
+//
+// form__control
+// input, checkbox, radio, select, etc
+.form__control {
+  width: 100%;
+}
+
+.form__field .form__control {
+  line-height: auto;
+}
+
+.form__field.active {
+  border-bottom: rgb(104, 4, 4) calcRem(4px) solid;
+}

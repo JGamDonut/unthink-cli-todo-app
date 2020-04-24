@@ -1,0 +1,77 @@
+<selection-list class=""
+                role="checkboxgroup">
+  <ul>
+    <li each="{ item in props.items }">
+      <selection-list-item id="{ item.id }"
+                           title="{ item.title }"
+                           completed="{ item.completed }"
+                           on-change="{ _onChange }"
+                           on-delete="{ _onDelete }"/>
+    </li>
+  </ul>
+  
+
+  <script type="ts">
+    import {RiotComponentExport} from 'riot';
+    import SelectionListItem from '../../ui-components/list/selection-list-item.riot';
+    import {TodoCheckboxInterface} from '../../interfaces/todo.interface';
+
+    interface BracketBoxComponent extends RiotComponentExport<{}, {}> {
+      _onChange(value: TodoCheckboxInterface): void;
+      _onDelete(value: number): void;
+    }
+
+    function build(): BracketBoxComponent {
+      return {
+
+        onBeforeMount(): void {
+          // gotta figure how to mount and unmount the root parent component until data loads
+          /*
+          if (this.props.items.length < 1) {
+            throw new Error('selection-list is missing required items attribute.');
+          }
+           */
+        },
+
+        _onChange(value: TodoCheckboxInterface): void {
+          this.props.onChange(value);
+        },
+
+        _onDelete(value: number): void {
+          this.props.onDelete(value);
+        },
+      };
+    }
+
+    build.components = {
+      SelectionListItem
+    };
+
+    export default build;
+  </script>
+
+  <style type="scss">
+    @import 'src/client/sass/base/_mixins';
+    @import 'src/client/sass/base/functions';
+    @import 'src/client/sass/base/section';
+    @import 'src/client/sass/vars/_colors';
+    @import 'src/client/sass/base';
+
+    :host {
+      display: block;
+      margin: calcRem(20px) 0;
+    }
+
+    ul {
+      padding: 0;
+      margin: 0;
+      list-style: none;
+    }
+
+    li {
+      margin: calcRem(10px) 0;
+    }
+
+  </style>
+
+</selection-list>

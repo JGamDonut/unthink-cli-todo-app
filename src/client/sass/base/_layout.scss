@@ -1,0 +1,121 @@
+// `LAYOUT
+// ----------------------------------------------------------------
+
+// flexgrid container use
+// ------------------------
+// flexgrid
+// flexgrid--block
+// flexgrid--gutter
+
+// flexgrid item use
+// --------------------------
+// flexgrid__col
+// flexgrid__col--x-x
+// flexgrid__col--x-x-(breakpoint)
+
+// layout/grid variables
+// map/list definition for break points for grid
+// reference _mixin.scss
+// if need more just add to the list from reference file above
+$gridbreakpointlist: (
+  ml: $break_ml,
+  lxx: $break_lxx,
+);
+
+$cols: 12;
+$gutter: 1%;
+$gutterTB: 20px;
+$gutterRL: 2%;
+
+// flex base
+.flexgrid {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  width: 100%;
+
+  &+& {
+    margin-top: $gutterTB;
+  }
+}
+
+// align in a stack = block set the > cols to stacked/block elements
+.flexgrid--block {
+  flex-direction: column;
+}
+
+// flex section
+// items, child of flex parent
+// flex__section = row or colum
+// ---------------------------------------
+.flexgrid__col {
+  position: relative;
+  width: 100%;
+  height: 100%;
+
+  & > * {
+    max-width: 100%;
+  }
+}
+
+.flexgrid--gutter>.flexgrid__col {
+  &+.flexgrid__col {
+    margin-left: $gutterRL;
+  }
+}
+
+// width margin generator for flex_section (s)
+@for $x from 1 through $cols {
+  @for $j from 1 through $x {
+
+    // base : flush no gutter spacing
+    // --------------------------------
+    .flexgrid__col--#{$j}-#{$x} {
+      width: percentage($j / $x);
+    }
+
+    // space in between section
+    //-------------------------------------
+    .flexgrid--gutter>.flexgrid__col--#{$j}-#{$x} {
+      width: (percentage($j / $x) - $gutterRL) + (($j / $x) * $gutterRL);
+    }
+
+    // flex sections with breakpoints
+    // ex. .flexgrid__col--1-2-m
+    @each $key in $gridbreakpointlist {
+      $breakpointName: nth($key, 1);
+      $breakpointVar: nth($key, 2);
+
+      .flexgrid--block-#{$breakpointName} {
+        @include max-width($breakpointVar) {
+          flex-direction: column;
+        }
+      }
+
+      // base
+      .flexgrid__col--#{$j}-#{$x}-#{$breakpointName} {
+        @include min-width($breakpointVar) {
+          width: percentage($j / $x);
+        }
+      }
+
+      // space in between
+      .flexgrid--gutter>.flexgrid__col--#{$j}-#{$x}-#{$breakpointName} {
+        @include min-width($breakpointVar) {
+          width: (percentage($j / $x) - $gutterRL) + (($j / $x) * $gutterRL);
+        }
+      }
+
+      // space in between
+      .flexgrid--gutter>.flexgrid__col--#{$j}-#{$x}-#{$breakpointName} +.flexgrid__col--#{$j}-#{$x}-#{$breakpointName} {
+        margin-left: 0;
+
+        @include min-width($breakpointVar) {
+          margin-left: $gutterRL;
+        }
+      }
+
+    }
+
+  }
+}

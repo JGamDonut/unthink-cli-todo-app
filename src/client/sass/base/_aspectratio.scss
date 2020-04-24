@@ -1,0 +1,32 @@
+// `ASPECT RATIO
+// ----------------------------------------------------------------
+
+// aspect-ratio-1-1
+// aspect-ratio-16-9 
+// aspect-ratio-4-3
+
+
+
+
+
+
+
+
+
+// 1:1 Aspect Ratio
+.aspect-ratio-1-1 {
+  position: relative;
+  padding-bottom: 100%;
+}
+
+// 16:9 Aspect Ratio
+.aspect-ratio-16-9 {
+  position: relative;
+  padding-top: 56.25%;
+}
+
+// 4:3 Aspect Ratio
+.aspect-ratio-4-3 {
+  position: relative;
+  padding-top: 75%;
+}

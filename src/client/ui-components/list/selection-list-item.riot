@@ -1,0 +1,176 @@
+<selection-list-item class="">
+  <checkbox-field id="{ props.id }"
+                  class="selection-list-item__control-checkbox"
+                  name="{ props.title }"
+                  value="{ props.id }"
+                  is-selected="{ props.completed }"
+                  on-change="{ _onChange }"/>
+   <input id="{ `textinput-${props.id}` }"
+          type="text"
+          class="selection-list-item__control-input"
+          name="{ props.title }"
+          value="{ props.title }"
+          onblur="{ _onInputBlur }"
+          onkeyup="{ _onInputKeyUp }"
+          disabled="{ state.isReadonly || false }"/>
+
+  <div class="selection-list-item__controls">
+    <button onclick="{ _onClickEdit }"
+            type="button">Edit</button>
+    <button onclick="{ _onClickDelete }"
+            type="button">Delete</button>
+  </div>
+
+
+  <script type="ts">
+    import {RiotComponentExport} from 'riot';
+    import {TodoCheckboxInterface} from '../../interfaces/todo.interface';
+    import CheckboxField from '../../ui-components/forms/checkbox-field.riot';
+
+    interface State {
+      listItem: TodoCheckboxInterface;
+      isSelected: boolean;
+      isReadonly: boolean;
+    }
+
+    interface SelectionListItemComponent extends RiotComponentExport<{}, State> {
+      state: State;
+      _onChange(value: TodoCheckboxInterface): void;
+      _onInputBlur(e: Event): void;
+      _onInputKeyUp(e: KeyboardEvent): void;
+      _onClickEdit(): void;
+      _onClickDelete(): void;
+    }
+
+    function build(): SelectionListItemComponent {
+      return {
+        state: {
+          listItem: {
+            id: 0,
+            title: '',
+            completed: false
+          },
+          isSelected: false,
+          isReadonly: false
+        },
+
+        onBeforeMount(): void {
+          // gotta figure how to mount and unmount the root parent component until data loads
+          /* if (!this.props.id) {
+            throw new Error('selection-list-item is missing required id attribute.');
+          }
+          if (!this.props.title) {
+            throw new Error('selection-list-item is missing required title attribute.');
+          } */
+
+          // set the list item data from this.props
+          if (this.props.id && this.props.title) {
+            this.state.listItem = {
+              id: this.props.id,
+              title: this.props.title,
+              completed: this.props.isSelected
+            };
+          }
+        },
+
+        // checkbox inputs
+        // -----------------------------
+        _onChange(value: TodoCheckboxInterface): void {
+          this.state.listItem.completed = value.completed;
+          this.props.onChange(this.state.listItem);
+          this.update({
+            isSelected: this.state.listItem.completed,
+          });
+        },
+
+        // input field
+        // -----------------------------
+        _onInputBlur(e: Event): void {
+          this.state.listItem.title = (e.target as HTMLInputElement).value;
+          this.props.onChange(this.state.listItem);
+          this.update({
+            isReadonly: true,
+          });
+        },
+
+        _onInputKeyUp(e: KeyboardEvent): void {
+          if (e.key === 'Enter') {
+            this.state.listItem.title = (e.target as HTMLInputElement).value;
+            this.props.onChange(this.state.listItem);
+            this.update({
+              isReadonly: true,
+            });
+          }
+        },
+
+        // Buttons
+        // -----------------------------
+        _onClickEdit(): void {
+          this.$(`#textinput-${this.props.id}`).focus();
+          this.update({
+            isReadonly: false,
+          });
+        },
+
+        _onClickDelete(): void {
+          this.props.onDelete(this.props.id);
+        },
+
+      };
+    }
+
+    build.components = {
+      CheckboxField
+    };
+
+    export default build;
+  </script>
+
+  <style type="scss">
+    @import 'src/client/sass/base/_mixins';
+    @import 'src/client/sass/base/functions';
+    @import 'src/client/sass/base/section';
+    @import 'src/client/sass/vars/_colors';
+    @import 'src/client/sass/base';
+
+    :host {
+      display: block;
+      position: relative;
+      padding: calcRem(32px) calcRem(32px);
+      width: 100%;
+      height: 50px;
+      border: $light-grey 1px solid;
+      border-radius: $borderradius;
+    }
+
+    button + button {
+      margin-left: calcRem(20px);
+    }
+    checkbox-field,
+    .selection-list-item__control-checkbox {
+      position: absolute;
+      left: calcRem(24px);
+      top: 54%;
+      transform: translateY(-50%);
+      z-index: 1;
+    }
+
+    .selection-list-item__control-input {
+      position: absolute;
+      top: 47%;
+      transform: translateY(-50%);
+      width: 80%;
+      z-index: 0;
+    }
+
+    .selection-list-item__controls {
+      position: absolute;
+      right: calcRem(24px);
+      top: 50%;
+      transform: translateY(-50%);
+    }
+
+
+  </style>
+
+  </selection-list-item>

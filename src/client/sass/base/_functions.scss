@@ -1,0 +1,91 @@
+// functions
+//
+
+
+
+
+
+
+
+
+
+$unit: 16px;
+
+
+// global helper functions
+// stripe unit from value
+@function strip-unit($value) {
+  @return ($value / ($value * 0 + 1));
+}
+
+
+
+
+// CONVERT TO 'EM'
+// convert a given pixel or unitless values to em
+// usage:
+//  font-size: calcEm(20px);
+//  font-size: calcEm(20);
+@function calcEm($target, $context: $unit) {
+
+  // sass function to check if unit exist
+  // make unitless value to pixel
+  @if (unitless($target)) {
+    $target: $target * 1px;
+    $context: $context * 1px;
+  }
+
+  $em: ($target / $context) * 1em;
+  @return $em;
+}
+
+// CONVERT TO 'REM'
+// convert a given pixel or unitless values to rem
+// usage:
+//  font-size: calcRem(20px);
+//  font-size: calcRem(20);
+@function calcRem($px) {
+  // stripe unit from value
+  $val: strip-unit($px);
+
+  $rem: ($val / ($unit / 1px)) * 1rem;
+  @return $rem;
+}
+
+// CONVERT TO 'PERCENTAGE'
+// convert a given pixel or unitless values to %
+// usage:
+//  font-size: calcPct(20px);
+//  font-size: calcPct(20);
+
+@function calcPct($size, $newunit: $unit) {
+  $pctSize: $size / $newunit * 100;
+  // @debug $pctSize;
+  @return #{$pctSize};
+}
+
+
+
+
+
+
+
+
+
+// GETS OPPOSITE DIRECTION
+// usage: opposite-direction('right');
+@function opposite-direction($direction) {
+  //scss function to lowercase the value
+  $direction: to-lower-case($direction);
+
+  //define the map with opposite values
+  $opposite-direction-map: (
+    'top': 'bottom',
+    'right': 'left',
+    'bottom': 'top',
+    'left': 'right'
+  );
+
+  // return map value and remove quotes.
+  @return unquote(map-get($opposite-direction-map, $direction));
+}

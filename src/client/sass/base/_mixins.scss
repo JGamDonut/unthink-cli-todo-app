@@ -1,0 +1,84 @@
+// `MIXINS
+// Setup the heavy-lifting mixins in here
+// ========================================================================== 
+
+$unit: 16px;
+
+// breakpoint variable
+$break_ml: 68.75rem; // 1100px
+$break_lxx: 90rem; // 1440px
+
+$breakpointlist: (
+  ml: $break_ml,
+  lxx: $break_lxx );
+
+// Media-Query mixins and IE support based on: 
+// http://jakearchibald.github.com/sass-ie/
+@mixin touch-hover($action) {
+  @media (hover: $action) {
+    @content;
+  }
+}
+
+.largescreen-only, .largescreen-only {
+  @media (max-width: $break_ml) {
+    display: none;
+  }
+}
+
+.smallscreen-only {
+  @media (min-width: $break_ml) {
+    display: none;
+  }
+}
+
+@mixin tablet-landscape-down {
+
+  // 1100 - .5px
+  @media (max-width: $break_ml - 0.03125rem) {
+    @content;
+  }
+}
+
+@mixin tablet-landscape-up {
+
+  // 1100
+  @media (min-width: $break_ml) {
+    @content;
+  }
+}
+
+// width based
+//specify min-width
+@mixin min-width($minWidth) {
+  @media screen and (min-width: $minWidth) {
+    @content;
+  }
+}
+
+//specify max-width
+@mixin max-width($maxWidth) {
+
+  //max-width - .5px
+  @media screen and (max-width: $maxWidth - 0.03125rem) {
+    @content;
+  }
+}
+
+//specify max-height
+@mixin min-height($minHeight) {
+
+  //min-height - .5px
+  @media screen and (min-height: $minHeight - 0.03125rem) {
+    @content;
+  }
+}
+
+//specify max-height
+@mixin max-height($maxHeight) {
+
+  //max-height - .5px
+  @media screen and (max-height: $maxHeight - 0.03125rem) {
+    @content;
+  }
+}

@@ -2,16 +2,23 @@
 
   <h1>{ state.pageTitle }</h1>
 
-  <ul>
-    <li each="{ todo in state.todos }">
-      { todo.title }
-    </li>
-  </ul>
+  <p>{ state.todos.length } items on the todo list</p>
+
+  <button onclick="{ onAddTodo }"
+          type="button">Add New Todo</button>
+
+  <selection-list items="{ state.todos }"
+                  on-change="{ onChangeTodo }"
+                  on-delete="{ onDeleteTodo }"/>
+
+
 
   <script type="ts">
     import {RiotComponentExport} from 'riot';
+    import {TodoCheckboxInterface} from '../../interfaces/todo.interface';
     import {TodoModel} from '../../../server/models/todo-model';
-    import {getTodos} from './api';
+    import {deleteTodo, getTodos, postTodo, putTodo} from '../../services/todo-api';
+    import SelectionList from '../../ui-components/list/selection-list.riot';
 
     interface State {
       pageTitle: string;
@@ -20,12 +27,14 @@
 
     interface TodoApp extends RiotComponentExport<never, State> {
       state: State;
+      onChangeTodo(value: TodoCheckboxInterface): void;
+      onDeleteTodo(value: TodoCheckboxInterface): void;
     }
 
     function build(): TodoApp {
       return {
         state: {
-          pageTitle: 'Shyt I gotz Todo, TODAY!',
+          pageTitle: 'ShytEhGotTadu, TODAY!',
           todos: []
         },
 
@@ -36,9 +45,50 @@
                 todos: todo
               });
             });
-        }
+        },
+
+        onAddTodo(): void {
+          postTodo({
+            id: (Math.ceil(Math.random() * 1000000)) || this.state.todos.length,
+            title: 'new todo',
+            completed: false,
+            dateCreated: new Date()
+          })
+            .then((results) => {
+              this.update({
+                todos: results
+              });
+            });
+        },
+
+        onChangeTodo(value: TodoCheckboxInterface): void {
+          putTodo({
+            id: value.id,
+            title: value.title,
+            completed: value.completed,
+            dateCreated: this.state.todos.filter((todo) => todo.id === value.id)[0].dateCreated || new Date()
+          })
+            .then((results) => {
+              this.update({
+                todos: results
+              });
+            });
+        },
+
+        onDeleteTodo: function (value: TodoCheckboxInterface): void {
+          deleteTodo(value.toString())
+            .then((results) => {
+              this.update({
+                todos: results
+              });
+            });
+        },
       };
     }
+
+    build.components = {
+      SelectionList
+    };
 
     export default build;
   </script>
@@ -46,6 +96,9 @@
   <style type="scss">
     :host {
       display: block;
+      max-width: 90vw;
+      width: 100%;
+      margin: auto;
     }
   </style>
 </todo-app>

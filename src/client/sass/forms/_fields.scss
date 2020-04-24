@@ -1,0 +1,54 @@
+@import '../vars/colors';
+
+$border-color: $dark-grey;
+
+label {
+  // font-weight: bold;
+
+  .input-block > &{
+    display: block;
+  }
+
+  .input-block.has-error > & {
+    color: $med-grey;
+  }
+}
+
+input[type=text],
+input[type=email],
+input[type=password] {
+  padding: calcRem(4px) calcRem(16px);
+  height: calcRem(44px);
+  background-color: #FFFFFF;
+  border: none;
+  border-radius: $borderradius;
+  color: $dark-grey;
+  font-size: calcRem(16px);
+  font-family: $fonts-base;
+  box-sizing: border-box;
+  
+  &:focus {
+    background-image: none;
+    outline: 0;
+  }
+
+  .input-block > & {
+    width: 100%;
+  }
+}
+
+.input-block {
+
+  + .input-block {
+    margin-top: 1rem;
+  }
+}
+
+button {
+  padding: calcEm(10px) calcRem(20px);
+  background-color: $white;
+  border: calcRem(1px) solid $black;
+  border-radius: $borderradius;
+  cursor: pointer;
+  font-family: $fonts-base;
+}

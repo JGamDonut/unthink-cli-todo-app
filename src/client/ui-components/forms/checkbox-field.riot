@@ -1,0 +1,174 @@
+<checkbox-field class="input-block checkbox">
+
+  <!--  label  -->
+  <label for="{ `input-${props.id}` }"
+         class="checkbox__label"
+         aria-label="{ props.name }">{ props.name }</label>
+
+  <!--  hidden input field  -->     
+  <input id="{ `input-${props.id}` }"
+         class="checkbox__input"
+         type="checkbox"
+         name="{ props.name }"
+         value="{ props.name }"
+         checked="{ props.isSelected }"
+         onchange="{ _onInputChange }"/>
+  
+  <!--  faux input field  -->     
+	<i class="checkbox__input-faux">
+    <svg xmlns="http://www.w3.org/2000/svg" 
+         viewBox="0 0 18 18" 
+         role="img" 
+         class="checkbox__icon"
+         aria-labelledby="{ `svgimagecheckmark-${props.id}` }">
+      <title id="{ `svgimagecheckmark-${props.id}` }">checkmark</title>
+      <g>
+        <polygon points="6.281,15.045 0.446,9.21 1.241,8.415 6.281,13.455 16.759,2.977 17.554,3.773 	"/>
+      </g>
+    </svg>
+  </i>
+
+  <script type="ts">
+    import {RiotComponentExport} from 'riot';
+
+    interface CheckboxInputProps {
+      onChange: Function;
+      id: string;
+      name: string;
+      hasError?: boolean;
+    }
+
+    interface CheckboxInputState {
+      hasError: boolean;
+    }
+
+    interface CheckboxInputComponent extends RiotComponentExport<CheckboxInputProps, CheckboxInputState> {
+      state: CheckboxInputState;
+      _onInputChange(event: Event): void;
+    }
+
+    function build(): CheckboxInputComponent {
+      return {
+        state: {
+          hasError: false
+        },
+
+        onBeforeUpdate(): void {
+          // gotta figure how to mount and unmount the root parent component until data loads
+          /* if (!this.props.id) {
+            throw new Error('checkbox-field is missing required id attribute.');
+          }
+          if (!this.props.name) {
+            throw new Error('checkbox-field is missing required name attribute.');
+          }
+          if (!this.state.hasError && this.props.hasError) {
+            // new error state, grab focus
+            this.$('input').focus();
+          }
+          this.state.hasError = this.props.hasError;
+           */
+        },
+
+        _onInputChange(event: Event): void {
+          this.props.onChange({
+            id: this.props.id,
+            title: this.props.name,
+            completed: (event.target as HTMLInputElement).checked,
+          });
+        }
+      };
+    }
+
+    export default build;
+  </script>
+
+  <style type="scss">
+    @import 'src/client/sass/base/_mixins';
+    @import 'src/client/sass/base/functions';
+    @import 'src/client/sass/base/section';
+    @import 'src/client/sass/vars/_colors';
+    @import 'src/client/sass/base';
+
+    /*
+    // CUSTOM CHECKBOX ELEMENTS
+    // styled for all browsers and platforms
+    // issues with FF, IE in styling select elements
+    */
+    :host {
+      display: inline-flex;
+      position: relative;
+      align-items: center;
+    }
+
+    /* base element ======================== */
+    .checkbox {
+      position: relative;
+      display: inline-flex;
+      align-items: center;
+    }    
+    
+    /* label ======================== */
+    .checkbox__label {
+      order: 2;
+      font-family: $fonts-base;
+      opacity: 0;
+      visibility: hidden;
+      font-size: 0;
+      z-index: -10;
+    }
+
+    /* inpouts ======================== */
+    .checkbox__input,
+    .checkbox__input-faux {
+      padding: 0;
+      width: calcRem(16px);
+      height: calcRem(16px);
+    }
+
+    /* hides the native input form element */
+    .checkbox__input {
+      position: absolute;
+      top: calcRem(-2px);
+      left: calcRem(-4px);
+      padding: 0;
+      opacity: 0;
+      border: 0;
+      overflow: hidden;
+      cursor: pointer;
+      z-index: 5;
+    }
+
+    .checkbox__input-faux {
+      position: relative;
+      display: inline-block;
+      top: calcRem(-3px);
+      margin-right: calcRem(12px);
+      background: transparent;
+      border: calcRem(1px) solid #000000;
+    }
+
+    /* icon ======================== */
+    .checkbox__icon {
+      position: absolute;
+      width: calcRem(10px);
+      height: calcRem(10px);
+      top: 52%;
+      left: 52%;
+      transform: translate(-50%, -50%);
+      fill: transparent;
+    }
+    
+    /* checked ======================== */
+    .checkbox__input:checked + .checkbox__input-faux {
+      background-color: #000000;
+      border-color: #000000;
+    }
+
+    .checkbox__input:checked + .checkbox__input-faux .checkbox__icon {
+      display: inline-block;
+      fill: $white;
+    }
+
+  </style>
+
+</checkbox-field>
